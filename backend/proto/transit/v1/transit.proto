@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package transit.v1;
+
+
+// --- Shared types ---
+
+message LatLng {
+  double lat = 1;
+  double lng = 2;
+}
+
+message TimeRange {
+  string from = 1;
+  string to   = 2;
+}
+
+message BBox {
+  double min_lat = 1;
+  double min_lng = 2;
+  double max_lat = 3;
+  double max_lng = 4;
+}
+
+// --- Route shape ---
+
+message GetRouteShapeRequest {
+  string route_id = 1;
+}
+
+message RouteShape {
+  string route_id   = 1;
+  string route_name = 2;
+  repeated LatLng points = 3;
+}
+
+// --- Stops by route ---
+
+message GetStopsByRouteRequest {
+  string route_id = 1;
+}
+
+message Stop {
+  string stop_id   = 1;
+  string stop_name = 2;
+  double lat       = 3;
+  double lng       = 4;
+  int32  sequence  = 5;
+}
+
+message GetStopsByRouteResponse {
+  repeated Stop stops = 1;
+}
+
+// --- Stop stats ---
+
+message GetStopStatsRequest {
+  string    stop_id    = 1;
+  TimeRange time_range = 2;
+}
+
+message StopStats {
+  string stop_id        = 1;
+  string stop_name      = 2;
+  double avg_delay_sec  = 3;
+  double delay_rate     = 4;
+  int32  trip_count     = 5;
+  string next_departure = 6;
+}
+
+// --- Delay heatmap ---
+
+message GetDelayHeatmapRequest {
+  TimeRange time_range = 1;
+  BBox      bbox       = 2;
+}
+
+message HeatmapCell {
+  double lat          = 1;
+  double lng          = 2;
+  double delay_score  = 3;
+  int32  sample_count = 4;
+}
+
+message GetDelayHeatmapResponse {
+  repeated HeatmapCell cells = 1;
+}
+
+// --- Routes list ---
+
+message ListRoutesRequest {}
+
+message Route {
+  string route_id         = 1;
+  string route_short_name = 2;
+  string route_long_name  = 3;
+  double avg_delay_sec    = 4;
+}
+
+message ListRoutesResponse {
+  repeated Route routes = 1;
+}
+
+// --- Service ---
+
+service TransitService {
+  rpc ListRoutes(ListRoutesRequest)           returns (ListRoutesResponse);
+  rpc GetRouteShape(GetRouteShapeRequest)     returns (RouteShape);
+  rpc GetStopsByRoute(GetStopsByRouteRequest) returns (GetStopsByRouteResponse);
+  rpc GetStopStats(GetStopStatsRequest)       returns (StopStats);
+  rpc GetDelayHeatmap(GetDelayHeatmapRequest) returns (GetDelayHeatmapResponse);
+}

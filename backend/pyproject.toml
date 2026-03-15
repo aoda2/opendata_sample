@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yokohama-transit-backend"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "grpcio>=1.64",
+    "grpcio-tools>=1.64",
+    "protobuf>=5.27",
+    "strawberry-graphql[fastapi]>=0.235",
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.30",
+    "aiosqlite>=0.20",
+    "click>=8.1",
+]
+
+[project.scripts]
+import-gtfs = "cmd.importer:main"
+serve = "cmd.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cmd", "internal", "gen"]
