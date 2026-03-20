@@ -5,6 +5,7 @@ import Map from "react-map-gl/mapbox";
 import { DeckGL } from "@deck.gl/react";
 import { PathLayer, ScatterplotLayer } from "@deck.gl/layers";
 import type { PickingInfo } from "@deck.gl/core";
+import { webgl2Adapter } from "@luma.gl/webgl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const INITIAL_VIEW_STATE = {
@@ -80,6 +81,7 @@ export function RouteMap({ shape, stops, onStopClick }: Props) {
         initialViewState={INITIAL_VIEW_STATE}
         controller={true}
         layers={layers}
+        deviceProps={{ type: "webgl", adapters: [webgl2Adapter] }}
       >
         <Map
           mapboxAccessToken={mapToken}

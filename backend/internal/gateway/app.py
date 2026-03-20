@@ -24,7 +24,7 @@ def create_app(grpc_channel) -> FastAPI:
     graphql_router = GraphQLRouter(
         schema,
         context_getter=get_context,
-        graphiql=True,   # enable GraphiQL playground at /graphql
+        graphql_ide="graphiql",
     )
     app.include_router(graphql_router, prefix="/graphql")
 

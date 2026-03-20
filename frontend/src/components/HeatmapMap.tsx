@@ -5,13 +5,14 @@ import Map from "react-map-gl/mapbox";
 import { DeckGL } from "@deck.gl/react";
 import { HexagonLayer } from "@deck.gl/aggregation-layers";
 import type { MapViewState } from "@deck.gl/core";
+import { webgl2Adapter } from "@luma.gl/webgl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const INITIAL_VIEW_STATE: MapViewState = {
   longitude: 139.638,
   latitude: 35.443,
   zoom: 11,
-  pitch: 40,
+  pitch: 30,
   bearing: 0,
 };
 
@@ -47,7 +48,7 @@ export function HeatmapMap({ cells, onViewStateChange }: Props) {
       getPosition: (d: HeatmapCell) => [d.lng, d.lat],
       getColorWeight: (d: HeatmapCell) => d.delayScore,
       getElevationWeight: (d: HeatmapCell) => d.delayScore,
-      elevationScale: 200,
+      elevationScale: 1,
       radius: 300,
       colorRange: COLOR_RANGE,
       pickable: true,
@@ -76,6 +77,7 @@ export function HeatmapMap({ cells, onViewStateChange }: Props) {
       }}
       controller={true}
       layers={layers}
+      deviceProps={{ type: "webgl", adapters: [webgl2Adapter] }}
     >
       <Map
         mapboxAccessToken={mapToken}

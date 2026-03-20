@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@apollo/client/react";
 import { GET_STOP_STATS } from "@/gql/queries";
 
@@ -21,9 +22,13 @@ interface StopStatsData {
 }
 
 export function StopStatsPanel({ stopId, stopName, onClose }: Props) {
-  const now = new Date();
-  const from = now.toISOString();
-  const to = new Date(now.getTime() + 3600_000).toISOString();
+  const [{ from, to }] = useState(() => {
+    const now = new Date();
+    return {
+      from: now.toISOString(),
+      to: new Date(now.getTime() + 3600_000).toISOString(),
+    };
+  });
 
   const { data, loading } = useQuery<StopStatsData>(GET_STOP_STATS, {
     variables: { stopId, from, to },

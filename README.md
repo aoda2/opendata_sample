@@ -144,6 +144,30 @@ npm run dev
 
 ---
 
+## 起動・停止
+
+### 起動
+
+```bash
+# バックエンド（gRPC :50051 + GraphQL :8080）
+cd backend
+source .venv/bin/activate
+PYTHONPATH=. python -m cmd.server --db data/transit.db
+
+# フロントエンド（:3000）— 別ターミナルで
+cd frontend
+npm run dev
+```
+
+### 停止
+
+```bash
+# ポートを指定して強制終了
+lsof -ti :8080 -ti :50051 -ti :3000 | xargs kill -9
+```
+
+---
+
 ## Makefile コマンド一覧
 
 ```bash
